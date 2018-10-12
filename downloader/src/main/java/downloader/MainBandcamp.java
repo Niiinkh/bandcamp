@@ -19,7 +19,7 @@ public class MainBandcamp {
 		new Gui();
 	}
 	
-	public static void runDownload(String URLAdress) {
+	public static void runDownload(String URLAdress, String parentFolder) {
 		URL bandcampURL = null;
 		BufferedReader br = null;
 		
@@ -147,7 +147,7 @@ public class MainBandcamp {
 					else {
 						t = "Track no. " + Integer.toString(i) + ".mp3";
 					}
-					String directory = "C://Music/" + folderName + "/" + t;
+					String directory = parentFolder + "/" + folderName + "/" + t;
 					downloadSong(link, directory);
 					
 				}
