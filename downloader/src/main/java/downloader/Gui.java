@@ -24,7 +24,7 @@ public class Gui {
 		guiFrame.setLocationRelativeTo(null);
 		
 		// Create text field and delete the tool tip text on mouseClicked
-	    JTextField linkAdress = new JTextField("Please enter Bandcamp link here...");
+	    final JTextField linkAdress = new JTextField("Please enter Bandcamp link here...");
 	    
 	    linkAdress.addMouseListener(new MouseListener() {
 			
@@ -42,7 +42,7 @@ public class Gui {
 			}
 		});
 //	    
-	    JTextField directory = new JTextField("C:\\Music");
+	    final JTextField directory = new JTextField("C:\\Music");
 	    
 		JButton downloadBut = new JButton("Download Songs");
 		downloadBut.addActionListener(new ActionListener()
