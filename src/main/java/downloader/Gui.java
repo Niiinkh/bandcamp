@@ -15,6 +15,7 @@ public class Gui {
 
 
 	public Gui(){
+		//create Frame
 		JFrame guiFrame = new JFrame();
 		//make sure the program exits when the frame closes
 		guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,7 +26,7 @@ public class Gui {
 		
 		// Create text field and delete the tool tip text on mouseClicked
 	    final JTextField linkAdress = new JTextField("Please enter Bandcamp link here...");
-	    
+	    	    
 	    linkAdress.addMouseListener(new MouseListener() {
 			
 			public void mouseReleased(java.awt.event.MouseEvent e) {}
@@ -44,7 +45,7 @@ public class Gui {
 		{
 			public void actionPerformed(ActionEvent event) {
 //				FileDialog fd = new FileDialog(guiFrame, "Save file...", FileDialog.SAVE);
-				MainBandcamp.runDownload(linkAdress.getText(), directory.getText());
+				DownloadFiles.runDownload(linkAdress.getText(), directory.getText());
 			}
 		});
 
