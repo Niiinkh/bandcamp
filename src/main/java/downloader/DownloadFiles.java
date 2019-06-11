@@ -19,11 +19,12 @@ public class DownloadFiles {
 	private static String album;
 	private static String artist;
 
-	public static void runDownload(String URLAdress, String saveFileDirectory) {
+	public static void runDownload(URL url, String saveFileDirectory) {
 
-		BufferedReader br = getReaderFromURL(URLAdress);
+		BufferedReader br = getReaderFromURL(url);
 
 		String trackinfo = getTrackInfo(br);
+		System.out.println(trackinfo);
 
 		downloadTracks(saveFileDirectory, trackinfo);
 
@@ -40,8 +41,8 @@ public class DownloadFiles {
 				}
 
 				if (line.contains("trackinfo: [{")) {
-					int a = line.indexOf("[");
-					int b = line.indexOf("]") + 1;
+					int a = line.indexOf("[{");
+					int b = line.indexOf("}]") + 2;
 					trackinfo = line.substring(a, b);
 				}
 
@@ -53,12 +54,11 @@ public class DownloadFiles {
 		return trackinfo;
 	}
 
-	private static BufferedReader getReaderFromURL(String URLAdress) {
+	private static BufferedReader getReaderFromURL(URL url) {
 		BufferedReader br = null;
 		try {
 
-			URL bandcampURL = new URL(URLAdress);
-			URLConnection connection = bandcampURL.openConnection();
+			URLConnection connection = url.openConnection();
 			connection.connect();
 			br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 
@@ -72,16 +72,14 @@ public class DownloadFiles {
 
 	private static void downloadTracks(String parentDirectory, String trackinfo) {
 
-
-
 		String folderName = artist + " - " + album;
 		folderName = folderName.replaceAll("[\"?*`/<>|\":]", "");
 
 		JSONArray jsonArray = new JSONArray(trackinfo);
 		for (Object object : jsonArray) {
 			JSONObject jo = (JSONObject) object;
+			int trackNum = jo.getInt("track_num");
 			String songTitle = getSongTitle(jo);
-			Integer trackNum = jo.getInt("track_num");
 			String downloadLink = getDownloadLink(jo);
 			if (!downloadLink.equals("")) {
 				String fileName = Integer.toString(trackNum) + " " + songTitle + ".mp3";
