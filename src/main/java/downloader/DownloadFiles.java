@@ -11,22 +11,27 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.Mp3File;
+import com.mpatric.mp3agic.UnsupportedTagException;
 
 public class DownloadFiles {
 
 	private static String album;
 	private static String artist;
+	private static String year;
 
 	public static void runDownload(URL url, String saveFileDirectory) {
-
 		BufferedReader br = getReaderFromURL(url);
 
 		String trackinfo = getTrackInfo(br);
-		System.out.println(trackinfo);
-
+//		System.out.println(trackinfo);
 		downloadTracks(saveFileDirectory, trackinfo);
+		System.out.println("Done.");
 
 	}
 
@@ -38,6 +43,10 @@ public class DownloadFiles {
 
 				if (line.contains("<meta name=\"title\" content=")) {
 					getAlbumDescription(br.readLine());
+				}
+
+				if (line.contains("<meta name=\"Description\"")) {
+					extractYear(br.readLine());
 				}
 
 				if (line.contains("trackinfo: [{")) {
@@ -78,17 +87,48 @@ public class DownloadFiles {
 		JSONArray jsonArray = new JSONArray(trackinfo);
 		for (Object object : jsonArray) {
 			JSONObject jo = (JSONObject) object;
-			int trackNum = jo.getInt("track_num");
+			String trackNum = Integer.toString(jo.getInt("track_num"));
 			String songTitle = getSongTitle(jo);
 			String downloadLink = getDownloadLink(jo);
 			if (!downloadLink.equals("")) {
-				String fileName = Integer.toString(trackNum) + " " + songTitle + ".mp3";
-				String directory = parentDirectory + "/" + folderName + "/" + fileName;
+
+				String fileName = trackNum + " " + songTitle + ".mp3";
+				String directory = parentDirectory + "/" + folderName + "/";
+				File dir = new File(directory);
+				dir.mkdir();
 				System.out.println("Downloading: \"" + fileName + "\"");
-				downloadSong(downloadLink, directory);
+				File mp3TempFile = downloadSong(downloadLink);
+				writeMetaData(directory, fileName, mp3TempFile, gatherMetaData(trackNum, songTitle));
+
 			}
 
 		}
+	}
+
+	private static void createFolder(String directory) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void writeMetaData(String directory, String fileName, File mp3TempFile, MetaData metaData) {
+		try {
+			Mp3File mp3File = new Mp3File(mp3TempFile.getCanonicalPath());
+			metaData.setTags(mp3File, directory + fileName);
+		} catch (UnsupportedTagException | InvalidDataException | IOException e) {
+			e.printStackTrace();
+		} finally {
+			mp3TempFile.delete();
+		}
+	}
+
+	private static MetaData gatherMetaData(String trackNum, String songTitle) {
+		MetaData metaData = new MetaData();
+		metaData.setTrackNumber(trackNum);
+		metaData.setTitle(songTitle);
+		metaData.setArtist(artist);
+		metaData.setAlbum(album);
+		metaData.setYear(year);
+		return metaData;
 	}
 
 	private static String getSongTitle(JSONObject jo) {
@@ -98,18 +138,18 @@ public class DownloadFiles {
 		return songTitle;
 	}
 
-	private static boolean downloadSong(String urlAdress, String directory) {
+	public static File downloadSong(String urlAdress) {
 		try {
 			URL url = new URL(urlAdress);
-			File file = new File(directory);
-			FileUtils.copyURLToFile(url, file);
-			return true;
+			File tempFile = File.createTempFile("temp", ".mp3");
+			FileUtils.copyURLToFile(url, tempFile);
+			return tempFile;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return null;
 	}
 
 	private static String getDownloadLink(JSONObject jo) {
@@ -142,6 +182,16 @@ public class DownloadFiles {
 		} else {
 			artist = "unknown Artist";
 			album = "unknown Album";
+		}
+	}
+
+	private static void extractYear(String line) {
+		line = line.trim();
+		if (line.length() >= 4) {
+			String yearString = line.substring(line.length() - 4, line.length());
+			if (StringUtils.isNumeric(yearString)) {
+				year = yearString;
+			}
 		}
 	}
 }

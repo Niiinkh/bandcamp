@@ -1,14 +1,14 @@
 package downloader;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.net.URL;
 
 public class MainBandcamp {
 
-	public static void main(String[] args) throws MalformedURLException {
+	public static void main(String[] args) throws IOException {
 		String saveFileDirectory = System.getProperty("user.home") + "/Downloads/Privat/Musik";
 		
-		URL url = new URL("https://m-ward.bandcamp.com/album/more-rain");
+		URL url = new URL("https://tops.bandcamp.com/album/i-feel-alive");
 		DownloadFiles.runDownload(url, saveFileDirectory);
 	}
 
