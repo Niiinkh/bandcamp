@@ -7,8 +7,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,23 +17,22 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 
-public class DownloadFiles {
+public class BandcampDownload {
 
-	private static String album;
-	private static String artist;
-	private static String year;
+	private String album;
+	private String artist;
+	private String year;
 
-	public static void runDownload(URL url, String saveFileDirectory) {
+	public void runDownload(URL url, String saveFileDirectory) {
 		BufferedReader br = getReaderFromURL(url);
 
 		String trackinfo = getTrackInfo(br);
-//		System.out.println(trackinfo);
 		downloadTracks(saveFileDirectory, trackinfo);
 		System.out.println("Done.");
 
 	}
 
-	private static String getTrackInfo(BufferedReader br) {
+	private String getTrackInfo(BufferedReader br) {
 		String line;
 		String trackinfo = null;
 		try {
@@ -63,14 +60,12 @@ public class DownloadFiles {
 		return trackinfo;
 	}
 
-	private static BufferedReader getReaderFromURL(URL url) {
+	private BufferedReader getReaderFromURL(URL url) {
 		BufferedReader br = null;
 		try {
-
 			URLConnection connection = url.openConnection();
 			connection.connect();
 			br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -79,19 +74,18 @@ public class DownloadFiles {
 		return br;
 	}
 
-	private static void downloadTracks(String parentDirectory, String trackinfo) {
+	private void downloadTracks(String parentDirectory, String trackinfo) {
 
 		String folderName = artist + " - " + album;
 		folderName = folderName.replaceAll("[\"?*`/<>|\":]", "");
 
 		JSONArray jsonArray = new JSONArray(trackinfo);
 		for (Object object : jsonArray) {
-			JSONObject jo = (JSONObject) object;
-			String trackNum = Integer.toString(jo.getInt("track_num"));
-			String songTitle = getSongTitle(jo);
-			String downloadLink = getDownloadLink(jo);
-			if (!downloadLink.equals("")) {
-
+			JSONObject jsonObject = (JSONObject) object;
+			String trackNum = Integer.toString(jsonObject.getInt("track_num"));
+			String songTitle = getSongTitle(jsonObject);
+			String downloadLink = getDownloadLink(jsonObject);
+			if (!StringUtils.isEmpty(downloadLink)) {
 				String fileName = trackNum + " " + songTitle + ".mp3";
 				String directory = parentDirectory + "/" + folderName + "/";
 				File dir = new File(directory);
@@ -99,18 +93,12 @@ public class DownloadFiles {
 				System.out.println("Downloading: \"" + fileName + "\"");
 				File mp3TempFile = downloadSong(downloadLink);
 				writeMetaData(directory, fileName, mp3TempFile, gatherMetaData(trackNum, songTitle));
-
 			}
 
 		}
 	}
 
-	private static void createFolder(String directory) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private static void writeMetaData(String directory, String fileName, File mp3TempFile, MetaData metaData) {
+	private void writeMetaData(String directory, String fileName, File mp3TempFile, MetaData metaData) {
 		try {
 			Mp3File mp3File = new Mp3File(mp3TempFile.getCanonicalPath());
 			metaData.setTags(mp3File, directory + fileName);
@@ -121,7 +109,7 @@ public class DownloadFiles {
 		}
 	}
 
-	private static MetaData gatherMetaData(String trackNum, String songTitle) {
+	private MetaData gatherMetaData(String trackNum, String songTitle) {
 		MetaData metaData = new MetaData();
 		metaData.setTrackNumber(trackNum);
 		metaData.setTitle(songTitle);
@@ -131,14 +119,14 @@ public class DownloadFiles {
 		return metaData;
 	}
 
-	private static String getSongTitle(JSONObject jo) {
-		String songTitle = (String) jo.get("title");
+	private String getSongTitle(JSONObject jo) {
+		String songTitle = jo.getString("title");
 		songTitle = songTitle.replaceAll("[\"?*`/<>|\":]", "");
 		songTitle = songTitle.replaceAll("[\\\\]", "");
 		return songTitle;
 	}
 
-	public static File downloadSong(String urlAdress) {
+	public File downloadSong(String urlAdress) {
 		try {
 			URL url = new URL(urlAdress);
 			File tempFile = File.createTempFile("temp", ".mp3");
@@ -152,19 +140,15 @@ public class DownloadFiles {
 		return null;
 	}
 
-	private static String getDownloadLink(JSONObject jo) {
-		JSONObject file = (JSONObject) jo.get("file");
-		Map<String, Object> map = file.toMap();
-		Set<String> keySet = map.keySet();
-		String downloadLink = "";
-		for (String s : keySet) {
-			downloadLink = (String) file.get(s);
-			break;
+	private String getDownloadLink(JSONObject jo) {
+		if (jo.get("file") == JSONObject.NULL) {
+			return null;
 		}
-		return downloadLink;
+		JSONObject file = jo.getJSONObject("file");
+		return file.getString("mp3-128");
 	}
 
-	private static void getAlbumDescription(String brReadLine) {
+	private void getAlbumDescription(String brReadLine) {
 		String albumDescription = brReadLine.substring(brReadLine.indexOf("content") + 9, brReadLine.length() - 2);
 		int z1 = albumDescription.indexOf(", by ");
 		int z2 = albumDescription.length();
@@ -185,7 +169,7 @@ public class DownloadFiles {
 		}
 	}
 
-	private static void extractYear(String line) {
+	private void extractYear(String line) {
 		line = line.trim();
 		if (line.length() >= 4) {
 			String yearString = line.substring(line.length() - 4, line.length());
