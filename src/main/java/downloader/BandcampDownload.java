@@ -46,12 +46,11 @@ public class BandcampDownload {
 					extractYear(br.readLine());
 				}
 
-				if (line.contains("trackinfo: [{")) {
+				if (line.contains("&quot;trackinfo&quot;:[{")) {
 					int a = line.indexOf("[{");
 					int b = line.indexOf("}]") + 2;
-					trackinfo = line.substring(a, b);
+					trackinfo = line.substring(a, b).replace("&quot;", "\"");
 				}
-
 			}
 			br.close();
 		} catch (IOException e) {
