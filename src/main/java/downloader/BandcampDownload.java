@@ -1,5 +1,7 @@
 package downloader;
 
+import static downloader.SpecialCharacterUtil.replaceSpecialCharacters;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -120,6 +122,7 @@ public class BandcampDownload {
 
 	private String getSongTitle(JSONObject jo) {
 		String songTitle = jo.getString("title");
+		songTitle = replaceSpecialCharacters(songTitle);
 		songTitle = songTitle.replaceAll("[\"?*`/<>|\":]", "");
 		songTitle = songTitle.replaceAll("[\\\\]", "");
 		return songTitle;
@@ -153,12 +156,10 @@ public class BandcampDownload {
 		int z2 = albumDescription.length();
 		if (z1 != -1) {
 			album = albumDescription.substring(0, z1);
-			album = album.replaceAll("&#39;", "'");
-			album = album.replaceAll("&amp;", "&");
+			album = replaceSpecialCharacters(album);
 			if (z2 != -1) {
 				artist = albumDescription.substring(z1 + 5, z2);
-				artist = artist.replaceAll("&#39;", "'");
-				artist = artist.replaceAll("&amp;", "&");
+				artist = replaceSpecialCharacters(artist);
 			} else {
 				artist = "unknown Artist";
 			}
