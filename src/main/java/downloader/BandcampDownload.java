@@ -1,6 +1,7 @@
 package downloader;
 
 import static downloader.SpecialCharacterUtil.replaceSpecialCharacters;
+import static downloader.StringExtraction.extraxtJsonArray;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -49,9 +50,7 @@ public class BandcampDownload {
 				}
 
 				if (line.contains("&quot;trackinfo&quot;:[{")) {
-					int a = line.indexOf("[{");
-					int b = line.indexOf("}]", a) + 2;
-					trackinfo = line.substring(a, b).replace("&quot;", "\"");
+					trackinfo = extraxtJsonArray(line).replace("&quot;", "\"");
 				}
 			}
 			br.close();
