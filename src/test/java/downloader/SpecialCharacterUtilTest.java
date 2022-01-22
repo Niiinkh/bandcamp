@@ -26,7 +26,16 @@ public class SpecialCharacterUtilTest {
 	public void testReplaceSpecialCharacters_apostropheWithSurroundingText() {
 		assertThat(replaceSpecialCharacters("Just don&#39;t")).isEqualTo("Just don't");
 	}
-	
-	
+
+	@Test
+	public void testReplaceQuotation() {
+		assertThat(SpecialCharacterUtil.replaceQuotation("&quot;")).isEqualTo("\"");
+	}
+
+	@Test
+	public void testReplaceQuotation_multipleQuotation() {
+		assertThat(SpecialCharacterUtil.replaceQuotation("test&quot;BLA&quot;test")).isEqualTo("test\"BLA\"test");
+	}
+
 
 }

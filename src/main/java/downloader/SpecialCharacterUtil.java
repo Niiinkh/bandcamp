@@ -20,4 +20,8 @@ public class SpecialCharacterUtil {
 		return stringToCleanUp.replaceAll("&amp;", "&");
 	}
 
+	public static String replaceQuotation(String stringToCleanUp) {
+		return stringToCleanUp.replaceAll("&quot;", "\"");
+	}
+
 }

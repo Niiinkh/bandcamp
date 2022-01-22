@@ -50,7 +50,7 @@ public class BandcampDownload {
 				}
 
 				if (line.contains("&quot;trackinfo&quot;:[{")) {
-					trackinfo = extraxtJsonArray(line).replace("&quot;", "\"");
+					trackinfo = extraxtJsonArray(line);
 				}
 			}
 			br.close();

@@ -18,4 +18,10 @@ public class StringExtractionTest {
 		assertThat(StringExtraction.extraxtJsonArray(stringWithJson)).isEqualTo("[{json}]");
 	}
 
+	@Test
+	public void testExtraxtJsonArray_withQuotation() {
+		String stringWithJson = "noisenoise[{&quot;json&quot;}]noisenoise";
+		assertThat(StringExtraction.extraxtJsonArray(stringWithJson)).isEqualTo("[{\"json\"}]");
+	}
+
 }
