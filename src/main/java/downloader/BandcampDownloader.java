@@ -1,7 +1,6 @@
 package downloader;
 
 import static downloader.SpecialCharacterUtil.replaceSpecialCharacters;
-import static downloader.StringExtraction.extraxtJsonArray;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,44 +19,13 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 
-public class BandcampDownload {
-
-	private String album;
-	private String artist;
-	private String year;
+public class BandcampDownloader {
 
 	public void runDownload(URL url, String saveFileDirectory) {
 		BufferedReader br = getReaderFromURL(url);
-
-		String trackinfo = getTrackInfo(br);
+		TrackInfo trackinfo = new TrackInfoGatherer().getTrackInfo(br);
 		downloadTracks(saveFileDirectory, trackinfo);
 		System.out.println("Done.");
-
-	}
-
-	private String getTrackInfo(BufferedReader br) {
-		String line;
-		String trackinfo = null;
-		try {
-			while ((line = br.readLine()) != null) {
-
-				if (line.contains("<meta name=\"title\" content=")) {
-					getAlbumDescription(br.readLine());
-				}
-
-				if (line.contains("<meta name=\"Description\"")) {
-					extractYear(br.readLine());
-				}
-
-				if (line.contains("&quot;trackinfo&quot;:[{")) {
-					trackinfo = extraxtJsonArray(line);
-				}
-			}
-			br.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return trackinfo;
 	}
 
 	private BufferedReader getReaderFromURL(URL url) {
@@ -74,12 +42,12 @@ public class BandcampDownload {
 		return br;
 	}
 
-	private void downloadTracks(String parentDirectory, String trackinfo) {
+	private void downloadTracks(String parentDirectory, TrackInfo trackinfo) {
 
-		String folderName = artist + " - " + album;
+		String folderName = trackinfo.getArtist() + " - " + trackinfo.getAlbum();
 		folderName = folderName.replaceAll("[\"?*`/<>|\":]", "");
 
-		JSONArray jsonArray = new JSONArray(trackinfo);
+		JSONArray jsonArray = new JSONArray(trackinfo.getTrackInfoJson());
 		for (Object object : jsonArray) {
 			JSONObject jsonObject = (JSONObject) object;
 			String trackNum = Integer.toString(jsonObject.getInt("track_num"));
@@ -92,7 +60,7 @@ public class BandcampDownload {
 				dir.mkdir();
 				System.out.println("Downloading: \"" + fileName + "\"");
 				File mp3TempFile = downloadSong(downloadLink);
-				writeMetaData(directory, fileName, mp3TempFile, gatherMetaData(trackNum, songTitle));
+				writeMetaData(directory, fileName, mp3TempFile, gatherMetaData(trackinfo, trackNum, songTitle));
 			}
 
 		}
@@ -109,13 +77,13 @@ public class BandcampDownload {
 		}
 	}
 
-	private MetaData gatherMetaData(String trackNum, String songTitle) {
+	private MetaData gatherMetaData(TrackInfo trackInfo, String trackNum, String songTitle) {
 		MetaData metaData = new MetaData();
 		metaData.setTrackNumber(trackNum);
 		metaData.setTitle(songTitle);
-		metaData.setArtist(artist);
-		metaData.setAlbum(album);
-		metaData.setYear(year);
+		metaData.setArtist(trackInfo.getArtist());
+		metaData.setAlbum(trackInfo.getAlbum());
+		metaData.setYear(trackInfo.getYear());
 		return metaData;
 	}
 
@@ -149,32 +117,5 @@ public class BandcampDownload {
 		return file.getString("mp3-128");
 	}
 
-	private void getAlbumDescription(String brReadLine) {
-		String albumDescription = brReadLine.substring(brReadLine.indexOf("content") + 9, brReadLine.length() - 2);
-		int z1 = albumDescription.indexOf(", by ");
-		int z2 = albumDescription.length();
-		if (z1 != -1) {
-			album = albumDescription.substring(0, z1);
-			album = replaceSpecialCharacters(album);
-			if (z2 != -1) {
-				artist = albumDescription.substring(z1 + 5, z2);
-				artist = replaceSpecialCharacters(artist);
-			} else {
-				artist = "unknown Artist";
-			}
-		} else {
-			artist = "unknown Artist";
-			album = "unknown Album";
-		}
-	}
-
-	private void extractYear(String line) {
-		line = line.trim();
-		if (line.length() >= 4) {
-			String yearString = line.substring(line.length() - 4, line.length());
-			if (StringUtils.isNumeric(yearString)) {
-				year = yearString;
-			}
-		}
-	}
+	
 }

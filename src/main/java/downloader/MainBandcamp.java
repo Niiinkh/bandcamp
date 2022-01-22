@@ -14,7 +14,7 @@ public class MainBandcamp {
 		new File(saveFileDirectory).mkdirs();
 
 		String bandcampUrl = args[0];
-		new BandcampDownload().runDownload(new URL(bandcampUrl), saveFileDirectory);
+		new BandcampDownloader().runDownload(new URL(bandcampUrl), saveFileDirectory);
 	}
 
 }
