@@ -24,6 +24,8 @@ public class BandcampDownloader {
 	public void runDownload(URL url, String saveFileDirectory) {
 		BufferedReader br = getReaderFromURL(url);
 		TrackInfo trackinfo = new TrackInfoGatherer().getTrackInfo(br);
+		System.out.println("Downloading " + trackinfo.getAlbum() + " by " + trackinfo.getArtist() + " ("
+				+ trackinfo.getYear() + ")");
 		downloadTracks(saveFileDirectory, trackinfo);
 		System.out.println("Done.");
 	}
@@ -117,5 +119,4 @@ public class BandcampDownloader {
 		return file.getString("mp3-128");
 	}
 
-	
 }
