@@ -7,19 +7,25 @@ import org.junit.jupiter.api.Test;
 public class StringExtractionTest {
 
 	@Test
-	public void testExtraxtJsonArray_stringWithOneArray() {
+	public void jsonArrayStringGetsExtractedFromNoise() {
 		String stringWithJson = "noisenoise[{json}]noisenoise";
 		assertThat(StringExtraction.extraxtJsonArray(stringWithJson)).isEqualTo("[{json}]");
 	}
 
 	@Test
-	public void testExtraxtJsonArray_stringWithPreviousArrayEnd() {
+	public void onlyFirstArrayGetsExtracted() {
+		String stringWithJson = "noisenoise[{firstJson}]noise[{secondJson}]noise";
+		assertThat(StringExtraction.extraxtJsonArray(stringWithJson)).isEqualTo("[{firstJson}]");
+	}
+
+	@Test
+	public void randomConfusingArrayEndIsIgnored() {
 		String stringWithJson = "confusingEnd}]noisenoise[{json}]noisenoise";
 		assertThat(StringExtraction.extraxtJsonArray(stringWithJson)).isEqualTo("[{json}]");
 	}
 
 	@Test
-	public void testExtraxtJsonArray_withQuotation() {
+	public void htmlQuotationsGetReplaced() {
 		String stringWithJson = "noisenoise[{&quot;json&quot;}]noisenoise";
 		assertThat(StringExtraction.extraxtJsonArray(stringWithJson)).isEqualTo("[{\"json\"}]");
 	}

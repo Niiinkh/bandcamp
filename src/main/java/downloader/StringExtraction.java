@@ -12,9 +12,9 @@ public class StringExtraction {
 	}
 	
 	public static String extraxtJsonArray(String inputString) {
-		int a = inputString.indexOf(JSON_ARRAY_START);
-		int b = inputString.indexOf(JSON_ARRAY_FINISH, a) + JSON_ARRAY_FINISH.length();
-		String jsonArray = inputString.substring(a, b);
+		String startCorrected = inputString.substring(inputString.indexOf(JSON_ARRAY_START));
+		int b = startCorrected.indexOf(JSON_ARRAY_FINISH) + JSON_ARRAY_FINISH.length();
+		String jsonArray = startCorrected.substring(0, b);
 		return replaceQuotation(jsonArray);
 	}
 
