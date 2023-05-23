@@ -1,28 +1,29 @@
 package downloader2.domain;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class Album {
 
-    private String name;
-    private String year;
+    private String title;
+    private LocalDate releaseDate;
     private String artist;
     private List<Track> tracks;
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getYear() {
-        return year;
+    public LocalDate getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setYear(String year) {
-        this.year = year;
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public String getArtist() {
