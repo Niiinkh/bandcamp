@@ -5,6 +5,8 @@ import downloader2.domain.Track;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +16,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class AlbumMapper {
+
+    private final Logger logger = LoggerFactory.getLogger(AlbumMapper.class);
 
     public Album mapFromJson(JSONObject json) {
         JSONObject current = json.optJSONObject("current", new JSONObject());
@@ -27,17 +31,17 @@ public class AlbumMapper {
         return album;
     }
 
-    private static LocalDate parseDate(String dateString) {
+    private LocalDate parseDate(String dateString) {
         String expectedPattern = "dd MMM yyyy";
         if (StringUtils.length(dateString) < expectedPattern.length())
             return null;
 
-        dateString = dateString.substring(0, expectedPattern.length());
+        String shortenedDate = dateString.substring(0, expectedPattern.length());
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(expectedPattern, Locale.ENGLISH);
-            return LocalDate.parse(dateString, formatter);
+            return LocalDate.parse(shortenedDate, formatter);
         } catch (DateTimeParseException e) {
-            // todo: log
+            logger.warn("Das ReleaseDate wird ignoeriert, da es nicht im erwarteten Format ist: " + dateString);
             return null;
         }
     }
