@@ -1,4 +1,4 @@
-package downloader2;
+package downloader2.adapter.in;
 
 import downloader2.domain.Track;
 import org.json.JSONObject;
