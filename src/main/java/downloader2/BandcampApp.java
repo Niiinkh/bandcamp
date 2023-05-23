@@ -12,9 +12,20 @@ public class BandcampApp {
     private static DownloadService downloader = new BandcampDownloader();
 
     public static void main(String[] args) throws IOException {
-        String url = "https://bigthief.bandcamp.com/album/dragon-new-warm-mountain-i-believe-in-you?from=footer-cc-a353779083";
-        //String url = "https://jackterriclothfoundation.bandcamp.com/releases";
+        /*
+        https://jackterriclothfoundation.bandcamp.com/releases;
+        https://theduesseldorfduesterboys.bandcamp.com/album/duo-duo
+        https://bigthief.bandcamp.com/album/dragon-new-warm-mountain-i-believe-in-you
+        https://spanishlovesongs.bandcamp.com/album/schmaltz
+        https://trikont.bandcamp.com/album/malva-das-grell-in-meinem-kopf
+        https://theduesseldorfduesterboys.bandcamp.com/album/im-winter-ep
+        https://theduesseldorfduesterboys.bandcamp.com/album/nenn-mich-musik
+        https://internationalmusicband.bandcamp.com/album/ententraum
+        https://internationalmusicband.bandcamp.com/album/mein-schweiss
+        https://trikont.bandcamp.com/album/philip-bradatsch
+        */
 
+        String url = "https://bigthief.bandcamp.com/album/dragon-new-warm-mountain-i-believe-in-you";
         Album album = downloader.requestDownload(url);
 
         System.out.println(album);

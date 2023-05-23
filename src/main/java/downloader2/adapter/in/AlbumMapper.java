@@ -26,7 +26,7 @@ public class AlbumMapper {
         album.setTitle(current.optString("title"));
         album.setArtist(json.optString("artist"));
         album.setReleaseDate(parseDate(json.optString("album_release_date")));
-        album.setTracks(mapTracks(json.getJSONArray("trackinfo")));
+        album.setTracks(mapTracks(json.getJSONArray("trackinfo"), album));
 
         return album;
     }
@@ -46,11 +46,11 @@ public class AlbumMapper {
         }
     }
 
-    private List<Track> mapTracks(JSONArray trackinfo) {
+    private List<Track> mapTracks(JSONArray trackinfo, Album album) {
         ArrayList<Track> tracks = new ArrayList<>();
         TrackMapper trackMapper = new TrackMapper();
         for (Object track : trackinfo) {
-            tracks.add(trackMapper.mapFromJson((JSONObject) track));
+            tracks.add(trackMapper.mapFromJson((JSONObject) track, album));
         }
         return tracks;
     }

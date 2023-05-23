@@ -1,5 +1,6 @@
 package downloader2.adapter.in;
 
+import downloader2.domain.Album;
 import downloader2.domain.Track;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,10 +11,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TrackMapperTest {
 
     private TrackMapper trackMapper;
+    private Album album;
+
 
     @BeforeEach
     void setup() {
         trackMapper = new TrackMapper();
+        album = new Album();
     }
 
     @Test
@@ -34,7 +38,7 @@ class TrackMapperTest {
                 			"duration": 186.543
                 }
                 """;
-        Track track = trackMapper.mapFromJson(new JSONObject(trackWithDownloadLink));
+        Track track = trackMapper.mapFromJson(new JSONObject(trackWithDownloadLink), album);
         assertThat(track.trackNumber()).isEqualTo(2);
         assertThat(track.title()).isEqualTo("Grasping At Straws");
         assertThat(track.artist()).isEqualTo("Worriers");
@@ -57,11 +61,53 @@ class TrackMapperTest {
                 			"duration": 186.543
                 }
                 """;
-        Track track = trackMapper.mapFromJson(new JSONObject(trackWithDownloadLink));
+        Track track = trackMapper.mapFromJson(new JSONObject(trackWithDownloadLink), album);
         assertThat(track.trackNumber()).isEqualTo(2);
         assertThat(track.title()).isEqualTo("Grasping At Straws");
         assertThat(track.artist()).isEqualTo("Worriers");
         assertThat(track.downloadLink()).isNull();
+    }
+
+    @Test
+    void trackWithArtistInformation() {
+        String trackJson = """
+                {
+                	"track_num": 2,
+                	"artist": "Worriers",
+                	"file": null
+                }
+                """;
+        Track track = trackMapper.mapFromJson(new JSONObject(trackJson), album);
+        assertThat(track.artist()).isEqualTo("Worriers");
+    }
+
+    @Test
+    void trackWithoutArtistInformation() {
+        String trackJson = """
+                {
+                	"track_num": 2,
+                	"artist": null,
+                	"file": null
+                }
+                """;
+        album.setArtist("Heavy Heavy");
+        Track track = trackMapper.mapFromJson(new JSONObject(trackJson), album);
+        assertThat(track.artist()).isEqualTo("Heavy Heavy");
+    }
+
+
+    @Test
+    void trackWithoutArtistAndAlbumArtistInformation() {
+        String trackJson = """
+                {
+                	"track_num": 2,
+                	"artist": null,
+                	"file": null
+                }
+                """;
+        album.setArtist(null);
+        Track track = trackMapper.mapFromJson(new JSONObject(trackJson), album);
+        assertThat(track.artist()).isEqualTo(null);
     }
 
 }
