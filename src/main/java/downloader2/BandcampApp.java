@@ -2,14 +2,17 @@ package downloader2;
 
 
 import downloader2.adapter.in.BandcampDownloader;
+import downloader2.adapter.in.JsoupWrapper;
 import downloader2.application.DownloadService;
 import downloader2.domain.Album;
+import downloader2.domain.MetaData;
+import downloader2.domain.Track;
 
 import java.io.IOException;
 
 public class BandcampApp {
 
-    private static DownloadService downloader = new BandcampDownloader();
+    private static DownloadService downloader = new BandcampDownloader(new JsoupWrapper());
 
     public static void main(String[] args) throws IOException {
         /*
@@ -25,10 +28,12 @@ public class BandcampApp {
         https://trikont.bandcamp.com/album/philip-bradatsch
         */
 
-        String url = "https://bigthief.bandcamp.com/album/dragon-new-warm-mountain-i-believe-in-you";
+        String url = "https://spanishlovesongs.bandcamp.com/album/schmaltz";
         Album album = downloader.requestDownload(url);
 
-        System.out.println(album);
+        for (Track track : album.getTracks()) {
+            System.out.println(new MetaData(track, album));
+        }
 
     }
 
