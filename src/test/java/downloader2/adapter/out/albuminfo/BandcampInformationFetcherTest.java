@@ -11,22 +11,22 @@ import java.io.File;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
-class BandcampAlbumInfoFetcherTest {
+class BandcampInformationFetcherTest {
 
     private static final String PATH = "src/test/resources/";
 
-    private BandcampAlbumInfoFetcher htmlParser;
+    private BandcampInformationFetcher informationFetcher;
     private Document document;
 
     @BeforeEach
     void setup() {
-        htmlParser = new BandcampAlbumInfoFetcher(new TestJsoupWrapper());
+        informationFetcher = new BandcampInformationFetcher(new TestJsoupWrapper());
     }
 
     @Test
     void integrationTest() throws Exception {
         document = Jsoup.parse(new File(PATH + "the-duesseldorf-duesterboys_im-winter.html"));
-        Album album = htmlParser.fetch("notRelevantForTest");
+        Album album = informationFetcher.fetch("notRelevantForTest");
 
         assertThat(album.getTitle()).isEqualTo("Im Winter EP");
         assertThat(album.getArtist()).isEqualTo("The Düsseldorf Düsterboys");

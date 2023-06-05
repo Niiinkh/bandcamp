@@ -1,6 +1,6 @@
 package downloader2.adapter.out.albuminfo;
 
-import downloader2.application.AlbumInformationFetcher;
+import downloader2.application.InformationFetcher;
 import downloader2.domain.Album;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
@@ -8,11 +8,11 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-public class BandcampAlbumInfoFetcher implements AlbumInformationFetcher {
+public class BandcampInformationFetcher implements InformationFetcher {
 
     private final JsoupWrapper jsoup;
 
-    public BandcampAlbumInfoFetcher(JsoupWrapper jsoup) {
+    public BandcampInformationFetcher(JsoupWrapper jsoup) {
         this.jsoup = jsoup;
     }
 

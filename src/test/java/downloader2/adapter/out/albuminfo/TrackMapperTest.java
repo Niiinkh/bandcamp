@@ -47,7 +47,7 @@ class TrackMapperTest {
 
     @Test
     void trackWithoutDownloadLink() {
-        String trackWithDownloadLink = """
+        String trackWithoutDownloadLink = """
                 {
                 			"id": 1815818753,
                 			"file": null,
@@ -61,7 +61,7 @@ class TrackMapperTest {
                 			"duration": 186.543
                 }
                 """;
-        Track track = trackMapper.mapFromJson(new JSONObject(trackWithDownloadLink), album);
+        Track track = trackMapper.mapFromJson(new JSONObject(trackWithoutDownloadLink), album);
         assertThat(track.trackNumber()).isEqualTo(2);
         assertThat(track.title()).isEqualTo("Grasping At Straws");
         assertThat(track.artist()).isEqualTo("Worriers");
