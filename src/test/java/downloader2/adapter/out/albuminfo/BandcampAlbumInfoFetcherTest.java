@@ -1,4 +1,4 @@
-package downloader2.adapter.in;
+package downloader2.adapter.out.albuminfo;
 
 import downloader2.domain.Album;
 import org.jsoup.Jsoup;
@@ -11,22 +11,22 @@ import java.io.File;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
-class BandcampDownloaderTest {
+class BandcampAlbumInfoFetcherTest {
 
     private static final String PATH = "src/test/resources/";
 
-    private BandcampDownloader htmlParser;
+    private BandcampAlbumInfoFetcher htmlParser;
     private Document document;
 
     @BeforeEach
     void setup() {
-        htmlParser = new BandcampDownloader(new TestJsoupWrapper());
+        htmlParser = new BandcampAlbumInfoFetcher(new TestJsoupWrapper());
     }
 
     @Test
     void integrationTest() throws Exception {
         document = Jsoup.parse(new File(PATH + "the-duesseldorf-duesterboys_im-winter.html"));
-        Album album = htmlParser.requestDownload("notRelevantForTest");
+        Album album = htmlParser.fetch("notRelevantForTest");
 
         assertThat(album.getTitle()).isEqualTo("Im Winter EP");
         assertThat(album.getArtist()).isEqualTo("The Düsseldorf Düsterboys");

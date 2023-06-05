@@ -1,4 +1,4 @@
-package downloader2.adapter.in;
+package downloader2.adapter.out.albuminfo;
 
 import downloader2.domain.Album;
 import downloader2.domain.Track;

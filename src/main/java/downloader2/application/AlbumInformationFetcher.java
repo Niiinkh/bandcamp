@@ -4,8 +4,8 @@ import downloader2.domain.Album;
 
 import java.io.IOException;
 
-public interface DownloadService {
+public interface AlbumInformationFetcher {
 
-    Album requestDownload(String url) throws IOException;
+    Album fetch(String url) throws IOException;
 
 }

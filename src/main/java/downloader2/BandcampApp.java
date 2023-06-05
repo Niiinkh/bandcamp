@@ -1,9 +1,9 @@
 package downloader2;
 
 
-import downloader2.adapter.in.BandcampDownloader;
-import downloader2.adapter.in.JsoupWrapper;
-import downloader2.application.DownloadService;
+import downloader2.adapter.out.albuminfo.BandcampAlbumInfoFetcher;
+import downloader2.adapter.out.albuminfo.JsoupWrapper;
+import downloader2.application.AlbumInformationFetcher;
 import downloader2.domain.Album;
 import downloader2.domain.MetaData;
 import downloader2.domain.Track;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class BandcampApp {
 
-    private static DownloadService downloader = new BandcampDownloader(new JsoupWrapper());
+    private static AlbumInformationFetcher albumInfo = new BandcampAlbumInfoFetcher(new JsoupWrapper());
 
     public static void main(String[] args) throws IOException {
         /*
@@ -28,8 +28,8 @@ public class BandcampApp {
         https://trikont.bandcamp.com/album/philip-bradatsch
         */
 
-        String url = "https://spanishlovesongs.bandcamp.com/album/schmaltz";
-        Album album = downloader.requestDownload(url);
+        String url = "https://jackterriclothfoundation.bandcamp.com/releases";
+        Album album = albumInfo.fetch(url);
 
         for (Track track : album.getTracks()) {
             System.out.println(new MetaData(track, album));
