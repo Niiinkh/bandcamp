@@ -1,7 +1,7 @@
-package downloader2.adapter.out.albuminfo;
+package downloader.adapter.out.albuminfo;
 
-import downloader2.domain.Album;
-import downloader2.domain.Track;
+import downloader.domain.Album;
+import downloader.domain.Track;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

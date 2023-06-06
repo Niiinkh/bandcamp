@@ -1,16 +1,16 @@
-package downloader2;
+package downloader;
 
 
-import downloader2.adapter.out.albuminfo.BandcampInformationFetcher;
-import downloader2.adapter.out.albuminfo.JsoupWrapper;
-import downloader2.adapter.out.downloader.BandcampAlbumDownloader;
-import downloader2.adapter.out.downloader.BandcampTrackDownloader;
-import downloader2.application.InformationFetcher;
-import downloader2.domain.Album;
+import downloader.adapter.out.albuminfo.BandcampInformationFetcher;
+import downloader.adapter.out.albuminfo.JsoupWrapper;
+import downloader.adapter.out.downloader.BandcampAlbumDownloader;
+import downloader.adapter.out.downloader.BandcampTrackDownloader;
+import downloader.application.InformationFetcher;
+import downloader.domain.Album;
 
 import java.io.IOException;
 
-import static downloader2.adapter.out.downloader.FileSystemUtil.homeDirectory;
+import static downloader.adapter.out.downloader.FileSystemUtil.homeDirectory;
 
 public class BandcampApp {
 

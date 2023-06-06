@@ -1,4 +1,4 @@
-package downloader2.domain;
+package downloader.domain;
 
 import org.apache.commons.lang3.StringUtils;
 

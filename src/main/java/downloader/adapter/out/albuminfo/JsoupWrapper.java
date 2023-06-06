@@ -1,4 +1,4 @@
-package downloader2.adapter.out.albuminfo;
+package downloader.adapter.out.albuminfo;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

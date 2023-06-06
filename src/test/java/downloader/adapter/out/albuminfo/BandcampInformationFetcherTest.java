@@ -1,6 +1,6 @@
-package downloader2.adapter.out.albuminfo;
+package downloader.adapter.out.albuminfo;
 
-import downloader2.domain.Album;
+import downloader.domain.Album;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.BeforeEach;

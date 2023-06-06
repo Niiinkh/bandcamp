@@ -1,7 +1,7 @@
-package downloader2.adapter.out.albuminfo;
+package downloader.adapter.out.albuminfo;
 
-import downloader2.application.InformationFetcher;
-import downloader2.domain.Album;
+import downloader.application.InformationFetcher;
+import downloader.domain.Album;
 import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;

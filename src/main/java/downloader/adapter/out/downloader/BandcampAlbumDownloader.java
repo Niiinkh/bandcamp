@@ -1,17 +1,17 @@
-package downloader2.adapter.out.downloader;
+package downloader.adapter.out.downloader;
 
 import com.mpatric.mp3agic.*;
-import downloader2.application.AlbumDownloader;
-import downloader2.domain.Album;
-import downloader2.domain.MetaData;
-import downloader2.domain.Track;
+import downloader.application.AlbumDownloader;
+import downloader.domain.Album;
+import downloader.domain.MetaData;
+import downloader.domain.Track;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static downloader2.adapter.out.downloader.FileSystemUtil.sanitize;
+import static downloader.adapter.out.downloader.FileSystemUtil.sanitize;
 
 public class BandcampAlbumDownloader implements AlbumDownloader {
 

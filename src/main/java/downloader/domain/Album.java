@@ -1,4 +1,4 @@
-package downloader2.domain;
+package downloader.domain;
 
 import java.time.LocalDate;
 import java.util.List;

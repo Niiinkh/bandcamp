@@ -1,4 +1,4 @@
-package downloader2.adapter.out.downloader;
+package downloader.adapter.out.downloader;
 
 public class FileSystemUtil {
 

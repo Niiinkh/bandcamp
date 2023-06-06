@@ -1,6 +1,6 @@
-package downloader2.application;
+package downloader.application;
 
-import downloader2.domain.Album;
+import downloader.domain.Album;
 
 public interface AlbumDownloader {
 
