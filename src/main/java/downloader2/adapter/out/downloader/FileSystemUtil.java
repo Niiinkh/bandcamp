@@ -6,7 +6,7 @@ public class FileSystemUtil {
         return System.getProperty("user.home");
     }
 
-    public static String removeForbiddenCharacters(String string) {
+    public static String sanitize(String string) {
         return string.replaceAll("[\"?*`/<>|\":]", "");
     }
 
