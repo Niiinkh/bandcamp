@@ -27,12 +27,14 @@ public class BandcampAlbumDownloader implements AlbumDownloader {
     public void download(Album album) {
         Path directory = createDirectoryFor(album);
         for (Track track : album.getTracks()) {
+            String fileName = track.trackNumber() + " " + sanitize(track.title()) + ".mp3";
             if (!StringUtils.isEmpty(track.downloadLink())) {
-                String fileName = track.trackNumber() + " " + sanitize(track.title()) + ".mp3";
-                System.out.println("Downloading: \"" + fileName + "\"");
+                System.out.println("Downloading: '" + fileName + "'");
                 MetaData metaData = new MetaData(track, album);
                 File mp3TempFile = trackDownloader.download(track.downloadLink());
                 saveFile(directory, fileName, mp3TempFile, metaData);
+            } else {
+                System.out.println("No Download link found: '" + fileName + "'");
             }
         }
     }
