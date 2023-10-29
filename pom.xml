@@ -107,7 +107,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>downloader.MainBandcamp</mainClass>
+                            <mainClass>downloader.BandcampApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

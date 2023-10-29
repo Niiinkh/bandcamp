@@ -41,7 +41,7 @@ public class AlbumMapper {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(expectedPattern, Locale.ENGLISH);
             return LocalDate.parse(shortenedDate, formatter);
         } catch (DateTimeParseException e) {
-            logger.warn("Das ReleaseDate wird ignoeriert, da es nicht im erwarteten Format ist: " + dateString);
+            logger.warn("Das ReleaseDate wird ignoriert, da es nicht im erwarteten Format ist: " + dateString);
             return null;
         }
     }
